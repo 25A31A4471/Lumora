@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMORA — Smart Expense Tracker</title>
+  <meta name="description" content="LUMORA — Track smart. Save more. Live better." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ WELCOME / AUTH SCREEN ============ -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-bg-blob blob-1"></div>
+    <div class="auth-bg-blob blob-2"></div>
+
+    <div class="auth-card">
+      <div class="brand">
+        <div class="brand-logo">L</div>
+        <div>
+          <h1 class="brand-name">LUMORA</h1>
+          <p class="brand-tag">Track smart. Save more. Live better.</p>
+        </div>
+      </div>
+
+      <!-- Login form -->
+      <form id="loginForm" class="auth-form">
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to continue your momentum.</p>
+
+        <label>Email
+          <input type="email" id="loginEmail" placeholder="you@example.com" required />
+        </label>
+        <label>Password
+          <input type="password" id="loginPassword" placeholder="••••••••" required minlength="4" />
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-full">Sign in</button>
+        <button type="button" class="btn btn-ghost btn-full" id="demoLoginBtn">
+          Try the Demo Account
+        </button>
+
+        <p class="switch-line">
+          New here? <a href="#" id="showSignup">Create an account</a>
+        </p>
+      </form>
+
+      <!-- Signup form -->
+      <form id="signupForm" class="auth-form hidden">
+        <h2>Create your account</h2>
+        <p class="muted">Start your money momentum today.</p>
+
+        <label>Full name
+          <input type="text" id="signupName" placeholder="Jane Doe" required minlength="2" />
+        </label>
+        <label>Email
+          <input type="email" id="signupEmail" placeholder="you@example.com" required />
+        </label>
+        <label>Password
+          <input type="password" id="signupPassword" placeholder="At least 4 characters" required minlength="4" />
+        </label>
+        <label>Confirm password
+          <input type="password" id="signupConfirm" placeholder="Repeat password" required minlength="4" />
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-full">Create account</button>
+
+        <p class="switch-line">
+          Already have an account? <a href="#" id="showLogin">Sign in</a>
+        </p>
+      </form>
+
+      <p class="auth-note">
+        🔒 <strong>Frontend demo:</strong> accounts and data are saved in your
+        browser's <code>localStorage</code>. Not production-grade security.
+      </p>
+    </div>
+  </div>
+
+  <!-- ============ MAIN APP ============ -->
+  <div id="appScreen" class="app-screen hidden">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo small">L</div>
+        <div>
+          <div class="brand-name small">LUMORA</div>
+          <div class="brand-tag small">Track smart. Save more.</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">📊</span> Dashboard
+        </button>
+        <button class="nav-item" data-page="transactions">
+          <span class="nav-icon">💳</span> Transactions
+        </button>
+        <button class="nav-item" data-page="budgets">
+          <span class="nav-icon">🎯</span> Budgets
+        </button>
+        <button class="nav-item" data-page="goals">
+          <span class="nav-icon">🐷</span> Savings Goals
+        </button>
+        <button class="nav-item" data-page="reports">
+          <span class="nav-icon">📈</span> Reports
+        </button>
+        <button class="nav-item" data-page="assistant">
+          <span class="nav-icon">💬</span> Lumi Assistant
+        </button>
+        <button class="nav-item" data-page="profile">
+          <span class="nav-icon">👤</span> Profile
+        </button>
+        <button class="nav-item" data-page="settings">
+          <span class="nav-icon">⚙️</span> Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="userNameSide">User</div>
+            <div class="user-email" id="userEmailSide">user@example.com</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-full" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Top bar -->
+      <header class="topbar">
+        <button class="icon-btn mobile-only" id="menuToggle" aria-label="Menu">☰</button>
+        <h2 class="page-title" id="pageTitle">Dashboard</h2>
+
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="quickAddBtn">+ Quick Add</button>
+          <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        </div>
+      </header>
+
+      <!-- ============ DASHBOARD PAGE ============ -->
+      <section class="page" id="page-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card gradient-1">
+            <div class="stat-label">Total Balance</div>
+            <div class="stat-value" id="statBalance">₹0</div>
+            <div class="stat-sub">Income − Expenses</div>
+          </div>
+          <div class="stat-card gradient-2">
+            <div class="stat-label">Total Income</div>
+            <div class="stat-value" id="statIncome">₹0</div>
+            <div class="stat-sub">All time</div>
+          </div>
+          <div class="stat-card gradient-3">
+            <div class="stat-label">Total Expenses</div>
+            <div class="stat-value" id="statExpense">₹0</div>
+            <div class="stat-sub">All time</div>
+          </div>
+          <div class="stat-card gradient-4">
+            <div class="stat-label">Savings Rate</div>
+            <div class="stat-value" id="statSavings">0%</div>
+            <div class="stat-sub">Income kept</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3>Monthly Spending</h3>
+              <span class="muted small" id="monthlyLabel">Current month</span>
+            </div>
+            <div class="bar-chart" id="monthlyChart"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Spending by Category</h3>
+            </div>
+            <div class="donut-wrap">
+              <div class="donut" id="categoryDonut"></div>
+              <div class="donut-legend" id="categoryLegend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3>Recent Transactions</h3>
+              <button class="link-btn" data-goto="transactions">View all →</button>
+            </div>
+            <div id="recentList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Budget Progress</h3></div>
+            <div id="budgetProgressList" class="list"></div>
+          </div>
+        </div>
+
+        <div class="card tip-card">
+          <div class="tip-icon">💡</div>
+          <div>
+            <div class="tip-title">Money Tip</div>
+            <div class="tip-text" id="tipText">Save at least 20% of your income every month.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TRANSACTIONS PAGE ============ -->
+      <section class="page hidden" id="page-transactions">
+        <div class="card">
+          <div class="toolbar">
+            <input type="search" id="searchInput" placeholder="🔍 Search transactions..." />
+            <select id="filterType">
+              <option value="">All types</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+            <select id="filterCategory"><option value="">All categories</option></select>
+            <select id="filterRange">
+              <option value="all">All time</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+            <select id="sortBy">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="highest">Highest amount</option>
+              <option value="lowest">Lowest amount</option>
+            </select>
+            <button class="btn btn-primary" id="addTxBtn">+ Add</button>
+            <button class="btn btn-ghost" id="exportCsvBtn">⬇ CSV</button>
+          </div>
+
+          <div class="totals-row">
+            <div>Income: <strong id="txTotalIncome">₹0</strong></div>
+            <div>Expenses: <strong id="txTotalExpense">₹0</strong></div>
+            <div>Net: <strong id="txTotalNet">₹0</strong></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div id="txList" class="list"></div>
+        </div>
+      </section>
+
+      <!-- ============ BUDGETS PAGE ============ -->
+      <section class="page hidden" id="page-budgets">
+        <div class="card">
+          <div class="card-head">
+            <h3>Monthly Budgets</h3>
+            <button class="btn btn-primary" id="addBudgetBtn">+ New Budget</button>
+          </div>
+          <p class="muted small">Set a monthly limit per category to keep spending in check.</p>
+        </div>
+        <div id="budgetList" class="list grid-cards"></div>
+      </section>
+
+      <!-- ============ GOALS PAGE ============ -->
+      <section class="page hidden" id="page-goals">
+        <div class="card">
+          <div class="card-head">
+            <h3>Savings Goals</h3>
+            <button class="btn btn-primary" id="addGoalBtn">+ New Goal</button>
+          </div>
+          <p class="muted small">Track progress toward what matters.</p>
+        </div>
+        <div id="goalList" class="list grid-cards"></div>
+      </section>
+
+      <!-- ============ REPORTS PAGE ============ -->
+      <section class="page hidden" id="page-reports">
+        <div class="card">
+          <div class="card-head">
+            <h3>Income vs Expenses</h3>
+            <select id="reportRange">
+              <option value="3">Last 3 months</option>
+              <option value="6" selected>Last 6 months</option>
+              <option value="12">Last 12 months</option>
+            </select>
+          </div>
+          <div class="bar-chart tall" id="reportBarChart"></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h3>Category Breakdown</h3></div>
+            <div id="reportCategoryList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Summary</h3></div>
+            <div id="reportSummary"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ASSISTANT PAGE ============ -->
+      <section class="page hidden" id="page-assistant">
+        <div class="card chat-card">
+          <div class="card-head">
+            <div class="lumi-head">
+              <div class="lumi-avatar">L</div>
+              <div>
+                <h3>Lumi</h3>
+                <p class="muted small">Demo assistant — rule-based, no API. Ask me about your money.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-window" id="chatWindow"></div>
+
+          <div class="chat-suggestions" id="chatSuggestions">
+            <button class="chip">How much did I spend this month?</button>
+            <button class="chip">What's my top category?</button>
+            <button class="chip">How do I save more?</button>
+            <button class="chip">How do I add an expense?</button>
+            <button class="chip">What is my savings rate?</button>
+            <button class="chip">How do budgets work?</button>
+          </div>
+
+          <form class="chat-input-row" id="chatForm">
+            <input type="text" id="chatInput" placeholder="Ask Lumi something..." autocomplete="off" />
+            <button class="btn btn-primary" type="submit">Send</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ PROFILE PAGE ============ -->
+      <section class="page hidden" id="page-profile">
+        <div class="card">
+          <div class="card-head"><h3>Profile</h3></div>
+          <div class="profile-head">
+            <div class="user-avatar big" id="profileAvatar">U</div>
+            <div>
+              <div class="profile-name" id="profileName">User</div>
+              <div class="muted" id="profileEmail">user@example.com</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <form id="profileForm" class="form-grid">
+            <label>Display name
+              <input type="text" id="profileNameInput" required minlength="2" />
+            </label>
+            <label>Email
+              <input type="email" id="profileEmailInput" required />
+            </label>
+            <label>Currency
+              <select id="profileCurrency">
+                <option value="INR">INR — ₹</option>
+                <option value="USD">USD — $</option>
+                <option value="EUR">EUR — €</option>
+              </select>
+            </label>
+            <label>Theme
+              <select id="profileTheme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS PAGE ============ -->
+      <section class="page hidden" id="page-settings">
+        <div class="card">
+          <div class="card-head"><h3>Data & Privacy</h3></div>
+          <p class="muted">
+            LUMORA stores everything locally in your browser using <code>localStorage</code>.
+            No data leaves your device. This is a frontend demo — do not use real sensitive information.
+          </p>
+          <div class="settings-actions">
+            <button class="btn btn-ghost" id="exportAllBtn">⬇ Export transactions (CSV)</button>
+            <button class="btn btn-danger" id="resetDemoBtn">🗑 Reset all data</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>About LUMORA</h3></div>
+          <p class="muted">
+            LUMORA is a portfolio demo built with pure HTML, CSS, and vanilla JavaScript.
+            No frameworks, no backend, no external libraries.
+          </p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============ MODAL ============ -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">Title</h3>
+        <button class="icon-btn" id="modalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
